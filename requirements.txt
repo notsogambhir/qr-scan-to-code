@@ -1,5 +1,1 @@
 pip freeze > requirements.txt
-flask
-pandas
-gunicorn
-psycopg2
