@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Code to Code</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: auto; padding: 20px; }
+    input, button { width: 100%; padding: 10px; margin: 10px 0; font-size: 1rem; }
+    .code-box { font-size: 2rem; background: #f0f0f0; padding: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+  <h2>Enter Details</h2>
+  <form method="POST">
+    <input type="text" name="name" placeholder="Name" value="{{ name or '' }}" required>
+    <input type="tel" name="phone" placeholder="Phone (10 digits)" value="{{ phone or '' }}" pattern="\d{10}" required>
+    <button type="submit">Get Code</button>
+  </form>
+  {% if message %}
+    <p style="color:red">{{ message }}</p>
+  {% endif %}
+  {% if code %}
+    <p>Your Code:</p>
+    <div class="code-box">{{ code }}</div>
+  {% endif %}
+</body>
+</html>
