@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Get Your Code</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your Code</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h2>Scan to Get Your Code</h2>
-        {% if message %}
-            <p class="message">{{ message }}</p>
-        {% endif %}
-        {% if code %}
-            <div class="code-box">{{ code }}</div>
-        {% endif %}
-        <form method="post">
-            <input type="text" name="name" placeholder="Enter your name" value="{{ name }}" required>
-            <input type="text" name="phone" placeholder="Enter 10-digit phone number" value="{{ phone }}" required>
+        <h1>Scan to Get Your Code</h1>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Enter your name" required>
+            <input type="tel" name="phone_number" pattern="[0-9]{10}" placeholder="Enter 10-digit phone number" required>
             <button type="submit">Submit</button>
         </form>
+        {% if user_code %}
+            <div class="code-box">
+                <p>Your Code:</p>
+                <h2>{{ user_code }}</h2>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
