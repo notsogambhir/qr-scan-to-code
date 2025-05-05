@@ -1,57 +1,71 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f7f7;
-    padding: 20px;
+    background-color: #f2f4f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .container {
-    max-width: 400px;
-    margin: 5vh auto;
-    background: white;
-    padding: 2rem;
+    background: #fff;
+    padding: 30px 40px;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 1rem;
+h1 {
+    margin-bottom: 20px;
     color: #333;
 }
 
-input, button {
-    width: 100%;
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input[type="text"],
+input[type="tel"] {
     padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
     border: 1px solid #ccc;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button {
-    background-color: #28a745;
-    color: white;
-    font-weight: bold;
+    padding: 12px;
+    background-color: #4a90e2;
+    color: #fff;
+    font-size: 16px;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #357abd;
 }
 
 .code-box {
-    background-color: #e9ecef;
-    font-size: 1.5rem;
-    text-align: center;
-    padding: 12px;
-    margin-bottom: 1rem;
-    border-radius: 8px;
+    margin-top: 25px;
+    background-color: #e0f7fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #00acc1;
 }
 
-.message {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #007bff;
+.code-box h2 {
+    margin: 10px 0 0;
+    font-size: 28px;
+    color: #007c91;
 }
