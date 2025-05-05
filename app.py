@@ -1,52 +1,53 @@
-from flask import Flask, render_template, request, redirect, url_for
-from sqlalchemy import create_engine, MetaData, Table, Column, String, select
+from flask import Flask, render_template, request
+from sqlalchemy import create_engine, MetaData, Table, select, update, and_
 import os
 
 app = Flask(__name__)
 
-# Use environment variable set on Railway for DATABASE_URL
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Use Railway's DATABASE_URL environment variable
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///local.db')  # fallback for local testing
 
-# Setup database connection
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
+metadata.reflect(bind=engine)
 
-# Define the 'codes' table (your actual table)
-codes = Table(
-    'codes', metadata,
-    Column('token_id', String, primary_key=True),
-    Column('code', String),
-    Column('phone_number', String),
-    Column('name', String),
-)
+# Reference the table
+codes = metadata.tables['codes']
 
-# Make sure metadata is loaded
-metadata.create_all(engine)
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def index():
     user_code = None
-    if request.method == 'POST':
-        name = request.form['name']
-        phone_number = request.form['phone_number']
+
+    if request.method == "POST":
+        name = request.form["name"]
+        phone = request.form["phone_number"]
 
         with engine.connect() as conn:
-            # Find the next unused code
-            stmt = select(codes).where(codes.c.name == None).limit(1)
-            result = conn.execute(stmt).first()
+            # Check if phone number already has a code
+            existing = conn.execute(
+                select(codes.c.code).where(codes.c.phone_number == phone)
+            ).fetchone()
 
-            if result:
-                # Update the entry with user data
-                update_stmt = codes.update().where(codes.c.token_id == result.token_id).values(
-                    name=name,
-                    phone_number=phone_number
-                )
-                conn.execute(update_stmt)
-                user_code = result.code
+            if existing:
+                user_code = existing[0]
             else:
-                user_code = "No available codes left."
+                # Find first row where phone_number is null
+                next_token = conn.execute(
+                    select(codes).where(codes.c.phone_number == None).limit(1)
+                ).fetchone()
 
-    return render_template('index.html', user_code=user_code)
+                if next_token:
+                    # Assign code to new user
+                    conn.execute(
+                        update(codes)
+                        .where(codes.c.token_id == next_token.token_id)
+                        .values(phone_number=phone, name=name)
+                    )
+                    user_code = next_token.code
+                else:
+                    user_code = "No codes available"
 
-if __name__ == '__main__':
+    return render_template("index.html", user_code=user_code)
+
+if __name__ == "__main__":
     app.run(debug=True)
