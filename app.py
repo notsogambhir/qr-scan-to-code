@@ -1,58 +1,46 @@
-from flask import Flask, request, render_template
-import psycopg2
+from flask import Flask, render_template, request
+from sqlalchemy import create_engine, text
 import os
 
 app = Flask(__name__)
 
-# DB connection
-def get_db_connection():
-    return psycopg2.connect(
-        host=os.environ['DB_HOST'],
-        dbname=os.environ['DB_NAME'],
-        user=os.environ['DB_USER'],
-        password=os.environ['DB_PASSWORD'],
-        port=os.environ.get('DB_PORT', 5432)
-    )
+# Database connection
+DATABASE_URL = os.environ.get("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    message = None
     name = ""
-    phone = ""
+    phone_number = ""
+    code = None
+    error = None
 
     if request.method == "POST":
         name = request.form.get("name", "").strip()
-        phone = request.form.get("phone", "").strip()
+        phone_number = request.form.get("phone", "").strip()
 
-        if not name or not phone or not phone.isdigit() or len(phone) != 10:
-            message = "Enter a valid 10-digit phone number and name."
-            return render_template("form.html", message=message, name=name, phone=phone)
-
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute("SELECT code FROM codes WHERE phone_number = %s", (phone,))
-        result = cur.fetchone()
-
-        if result:
-            code = result[0]
+        if not (phone_number.isdigit() and len(phone_number) == 10):
+            error = "Please enter a valid 10-digit phone number."
         else:
-            # Get first unassigned code
-            cur.execute("SELECT token_id, code FROM codes WHERE phone_number IS NULL LIMIT 1")
-            token = cur.fetchone()
-            if token:
-                token_id, code = token
-                cur.execute("UPDATE codes SET phone_number=%s, name=%s WHERE token_id=%s", (phone, name, token_id))
-                conn.commit()
-            else:
-                code = "No codes available."
+            with engine.connect() as conn:
+                # Check if phone number already exists
+                result = conn.execute(text("SELECT code FROM codes WHERE phone_number = :phone"), {"phone": phone_number}).fetchone()
 
-        cur.close()
-        conn.close()
+                if result:
+                    code = result[0]
+                else:
+                    # Find next available token without a phone number
+                    available = conn.execute(text("SELECT token_id, code FROM codes WHERE phone_number IS NULL ORDER BY token_id LIMIT 1")).fetchone()
+                    if available:
+                        token_id, code = available
+                        conn.execute(text("UPDATE codes SET phone_number = :phone, name = :name WHERE token_id = :token_id"),
+                                     {"phone": phone_number, "name": name, "token_id": token_id})
+                        conn.commit()
+                    else:
+                        error = "No more codes available."
 
-        return render_template("form.html", code=code, name=name, phone=phone)
-
-    return render_template("form.html")
+    return render_template("index.html", name=name, phone=phone_number, code=code, error=error)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
