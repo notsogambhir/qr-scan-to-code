@@ -1,7 +1,4 @@
-flask
-pandas
-gunicorn
-psycopg2
-psycopg2-binary
-SQLAlchemy
-python-dotenv
+Flask==2.3.2
+SQLAlchemy==2.0.23
+gunicorn==23.0.0
+psycopg2-binary==2.9.9
