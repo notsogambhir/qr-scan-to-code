@@ -4,11 +4,13 @@ import os
 
 app = Flask(__name__)
 
+# Get the database URL from environment or use local SQLite for development
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///local.db')
 
+# Set up SQLAlchemy engine and reflect the schema
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
-metadata.reflect(bind=engine)
+metadata.reflect(bind=engine, only=['codes'])  # Limit to just 'codes' table
 codes = metadata.tables['codes']
 
 @app.route("/", methods=["GET", "POST"])
@@ -19,7 +21,9 @@ def index():
         name = request.form["name"]
         phone = request.form["phone_number"]
 
-        with engine.connect() as conn:
+        # Start a transaction block to ensure writes are committed
+        with engine.begin() as conn:
+            # Check if phone number already has a code
             existing = conn.execute(
                 select(codes.c.code).where(codes.c.phone_number == phone)
             ).fetchone()
@@ -27,17 +31,21 @@ def index():
             if existing:
                 user_code = existing[0]
             else:
+                # Get the next unassigned token
                 next_token = conn.execute(
                     select(codes).where(codes.c.phone_number == None).limit(1)
-                ).fetchone()
+                ).mappings().first()
 
                 if next_token:
-                    conn.execute(
+                    # Update the token with user details
+                    result = conn.execute(
                         update(codes)
-                        .where(codes.c.token_id == next_token.token_id)
+                        .where(codes.c.token_id == next_token["token_id"])
                         .values(phone_number=phone, name=name)
                     )
-                    user_code = next_token.code
+                    print("Updated rows:", result.rowcount)
+
+                    user_code = next_token["code"]
                 else:
                     user_code = "No codes available"
 
