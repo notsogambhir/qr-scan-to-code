@@ -1,24 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Your Code</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>South Indian Feast QR Code Offer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fdf6f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 500px;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: #d35400;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    p {
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.4;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    input[type="text"],
+    input[type="tel"] {
+      padding: 0.8rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #d35400;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .code-box {
+      margin-top: 2rem;
+      background-color: #fcebd7;
+      padding: 1rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-align: center;
+      color: #e67e22;
+    }
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Scan to Get Your Code</h1>
-        <form method="POST">
-            <input type="text" name="name" placeholder="Enter your name" required>
-            <input type="tel" name="phone_number" placeholder="Enter 10-digit phone number" pattern="\d{10}" required>
-            <button type="submit">Submit</button>
-        </form>
-        {% if user_code %}
-            <div class="result">
-                <p>Your Code: <strong>{{ user_code }}</strong></p>
-            </div>
-        {% endif %}
+  <div class="container">
+    <h1>Vanakkam!</h1>
+    <p>Craving for South Indian food? Enjoy a <strong>REAL 50% discount</strong>!</p>
+    <p>Scan the QR below to unlock your feast.<br><br>So… wanna come?</p>
+
+    {% if code %}
+      <div class="code-box">
+        Awesome! Here is your 6 Digit Code:<br><br>
+        *{{ code }}*
+      </div>
+    {% else %}
+      <p><strong>Step 2:</strong><br>Enter your Name and Mobile number below</p>
+      <form method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="tel" name="phone" placeholder="Mobile Number (10 digits)" pattern="\d{10}" required>
+        <button type="submit">Get My Code</button>
+      </form>
+    {% endif %}
+
+    <div class="footer">
+      Offer Valid on <strong>DINE-IN</strong> and <strong>PICKUP</strong> only<br><br>
+      <strong>Our Address:</strong><br>
+      Block C Market, Sunny Enclave, Kharar
     </div>
+  </div>
 </body>
 </html>
