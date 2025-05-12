@@ -18,8 +18,12 @@ def index():
     code = None
 
     if request.method == "POST":
-        name = request.form["name"]
-        phone = request.form["phone_number"]
+        name = request.form.get("name")
+        phone = request.form.get("phone_number")
+
+        if not name or not phone:
+            return "Missing name or phone number", 400
+
 
         with engine.begin() as conn:
             # Check if this phone number already received a code
