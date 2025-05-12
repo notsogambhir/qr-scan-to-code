@@ -1,35 +1,37 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Discount</title>
+    <title>South Indian Feast</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>Vanakkam!</h1>
-        <p>Craving for South Indian food. Real 50% discount.</p>
+        <p>Craving for <strong>REAL</strong> South Indian food? Enjoy a <strong>REAL 50% discount</strong>!</p>
         <p>Scan the QR below to unlock your feast.</p>
 
-        <h2>Step 2</h2>
-        <p>After entering Name and Mobile</p>
+        <h2>So… wanna come?</h2>
+        <p><strong>Enter your Name and Mobile number below</strong></p>
+
+        <form method="POST">
+            <input type="text" name="name" placeholder="Enter your name" required>
+            <input type="tel" name="phone_number" placeholder="Enter 10-digit phone number" required pattern="[0-9]{10}">
+            <button type="submit">Get My Code</button>
+        </form>
 
         {% if user_code %}
-            <div class="code-box">
-                <p>Awesome<br>Here is your 6 Digit Code for Discount</p>
-                <strong>*{{ user_code }}*</strong>
-                <p>Offer Valid on DINEIN and PICKUP only</p>
-            </div>
-        {% else %}
-            <form method="POST">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="tel" name="phone_number" placeholder="10-digit Phone Number" pattern="\d{10}" required>
-                <button type="submit">Get Code</button>
-            </form>
+        <div class="code-box">
+            <p>Awesome</p>
+            <p>Here is your 6 Digit Code for Discount</p>
+            <h3>*{{ user_code }}*</h3>
+        </div>
         {% endif %}
 
+        <p class="footer-text">
+            Offer Valid on <strong>DINE-IN</strong> and <strong>PICKUP</strong> only
+        </p>
         <p><strong>Our Address:</strong><br>Block C Market, Sunny Enclave, Kharar</p>
     </div>
 </body>
