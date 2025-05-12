@@ -18,11 +18,11 @@ def index():
     code = None
 
     if request.method == "POST":
-        name = request.form.get("name")
-        phone = request.form.get("phone_number")
+        name = request.form.get("name", "").strip()
+        phone = request.form.get("phone_number", "").strip()
 
-        if not name or not phone:
-            return "Missing name or phone number", 400
+    if not name or not phone:
+        return "Missing name or phone number", 400
 
 
         with engine.begin() as conn:
