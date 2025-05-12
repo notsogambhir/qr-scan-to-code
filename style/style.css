@@ -1,47 +1,84 @@
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #fffaf0;
-    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fdf5ef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     text-align: center;
+}
+
+h1 {
+    color: #d35400;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    color: #d35400;
+    margin-top: 1.5rem;
+}
+
+p {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+form {
+    margin: 1rem 0;
 }
 
 input[type="text"],
 input[type="tel"] {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 16px;
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
     border: 1px solid #ccc;
     border-radius: 8px;
+    font-size: 1rem;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #ff6600;
+    width: 100%;
+    background-color: #d35400;
     color: white;
     border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
     border-radius: 8px;
     cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.3s ease;
 }
 
 button:hover {
-    background-color: #cc5200;
+    background-color: #bf4300;
 }
 
 .code-box {
-    background-color: #f9f9f9;
-    border: 2px dashed #999;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 10px;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #fdf1e5;
+    border: 2px dashed #d35400;
+    border-radius: 8px;
+}
+
+.code-box h3 {
+    margin: 0.5rem 0;
+    font-size: 2rem;
+    color: #d35400;
+}
+
+.footer-text {
+    margin-top: 2rem;
+    font-size: 0.9rem;
 }
